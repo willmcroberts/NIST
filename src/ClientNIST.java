@@ -10,10 +10,10 @@ public class ClientNIST {
             System.out.println("Need 2 arguments: serverIP and serverPort");
             return;
         }
-
+        byte[] buffer = new byte[1024];
         InetAddress serverIP = InetAddress.getByName(args[0]);
         int serverPort = Integer.parseInt(args[1]);
-        DatagramPacket requestPacket = new DatagramPacket(serverIP.getAddress(), serverPort);
+        DatagramPacket requestPacket = new DatagramPacket(buffer, buffer.length, InetAddress.getByAddress(serverIP.getAddress()), serverPort);
         DatagramSocket clientSocket = new DatagramSocket();
         clientSocket.send(requestPacket);
 
