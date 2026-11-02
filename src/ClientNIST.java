@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 
 public class ClientNIST {
@@ -21,8 +24,17 @@ public class ClientNIST {
         clientSocket.receive(serverReply);
         byte[] payload = Arrays.copyOf(serverReply.getData(), serverReply.getLength());
 
-        String replyMessage = new String(payload);
-        System.out.println("Server reply: " + replyMessage);
+        ByteBuffer byteBuffer = ByteBuffer.wrap(payload);
+        int value =  byteBuffer.getInt();
+
+        long almostDate = Integer.toUnsignedLong(value);
+
+        ZonedDateTime epoch = ZonedDateTime.of(1900, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
+
+        epoch = epoch.plusSeconds(almostDate);
+        ZonedDateTime updatedEpoch = epoch.withZoneSameInstant(ZoneId.of("America/New_York"));
+        System.out.println(updatedEpoch);
+
         clientSocket.close();
     }
 }
