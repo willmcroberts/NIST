@@ -1,4 +1,3 @@
-package udptimedate;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.nio.ByteBuffer;
