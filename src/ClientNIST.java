@@ -38,7 +38,3 @@ public class ClientNIST {
         clientSocket.close();
     }
 }
-
-
-// byte[4] -> 32-but int -> unsigned long -> Date & Time
-//ByteBuffer.wrap()
