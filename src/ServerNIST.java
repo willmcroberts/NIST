@@ -1,5 +1,6 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
@@ -14,6 +15,21 @@ public class ServerNIST {
          * - Send the reply with the 4-byte array as application data
          * back to the client
          */
+
+        DatagramSocket socket = new DatagramSocket(PORT);
+        DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+
+        while (true) {
+            socket.receive(packet);
+            InetAddress ClientAddress = packet.getAddress();
+            int ClientPort = packet.getPort();
+
+            byte[] payload = getCurrentTimeBytes();
+
+            DatagramPacket replyPacket = new DatagramPacket(payload, payload.length, ClientAddress, ClientPort);
+
+            socket.send(replyPacket);
+        }
     }
     /**
      * Returns the current time as a 4-byte array (which encodes the number of
@@ -21,6 +37,8 @@ public class ServerNIST {
      *
      * Do not modify this method.
      */
+
+
     public static byte[] getCurrentTimeBytes() {
 // Current time in UTC
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
